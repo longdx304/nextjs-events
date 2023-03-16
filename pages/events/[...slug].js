@@ -5,6 +5,7 @@ import ResultsTitle from '@/components/results-title/results-title.component';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useSwr from 'swr';
+import Head from 'next/head';
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -33,12 +34,31 @@ export default function FilteredEventsPage() {
     }
   }, [data]);
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name="description" content="A list of filtered events." />
+    </Head>
+  );
+
   if (!loadedEvents) {
-    return <p className="center">Loading...</p>;
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">Loading...</p>
+      </>
+    );
   }
 
   const year = +filterData[0];
   const month = +filterData[1];
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name="description" content={`All events for ${month}/${year}`} />
+    </Head>
+  );
 
   if (
     isNaN(year) ||
@@ -51,6 +71,7 @@ export default function FilteredEventsPage() {
   ) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid filter. Please adjust your values!</p>
         </ErrorAlert>
@@ -71,6 +92,7 @@ export default function FilteredEventsPage() {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found for the choosen filter!</p>
         </ErrorAlert>
@@ -85,6 +107,7 @@ export default function FilteredEventsPage() {
 
   return (
     <>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventsList events={filteredEvents} />
     </>

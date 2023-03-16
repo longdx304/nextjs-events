@@ -3,6 +3,7 @@ import EventContent from '@/components/event-content/event-content.component';
 import EventLogistics from '@/components/event-logistics/event-logistics.component';
 import EventSummary from '@/components/event-summary/event-summary.component';
 import { getEventById, getFeaturedEvents } from '@/utils/firebase';
+import Head from 'next/head';
 
 export default function EventDetailPage({ event }) {
   if (!event) {
@@ -17,6 +18,10 @@ export default function EventDetailPage({ event }) {
 
   return (
     <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+      </Head>
       <EventSummary title={title} />
       <EventLogistics
         date={date}
