@@ -2,14 +2,9 @@ import ErrorAlert from '@/components/error-alert/error-alert.component';
 import EventContent from '@/components/event-content/event-content.component';
 import EventLogistics from '@/components/event-logistics/event-logistics.component';
 import EventSummary from '@/components/event-summary/event-summary.component';
-import { getEventById } from '@/dummy-data';
-import { useRouter } from 'next/router';
+import { getEventById, getFeaturedEvents } from '@/utils/firebase';
 
-export default function EventDetailPage() {
-  const { query } = useRouter();
-
-  const event = getEventById(query.eventId);
-
+export default function EventDetailPage({ event }) {
   if (!event) {
     return (
       <ErrorAlert>
@@ -34,4 +29,29 @@ export default function EventDetailPage() {
       </EventContent>
     </>
   );
+}
+
+export async function getStaticProps(context) {
+  const eventId = context.params.eventId;
+  const event = await getEventById(eventId);
+
+  return {
+    props: { event },
+    revalidate: 30,
+  };
+}
+
+export async function getStaticPaths() {
+  const events = await getFeaturedEvents();
+
+  const paths = events.map((event) => ({
+    params: {
+      eventId: event.id,
+    },
+  }));
+
+  return {
+    paths: paths,
+    fallback: 'blocking',
+  };
 }
