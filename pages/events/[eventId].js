@@ -1,3 +1,4 @@
+import Comments from '@/components/comments/comments.component';
 import ErrorAlert from '@/components/error-alert/error-alert.component';
 import EventContent from '@/components/event-content/event-content.component';
 import EventLogistics from '@/components/event-logistics/event-logistics.component';
@@ -14,7 +15,7 @@ export default function EventDetailPage({ event }) {
     );
   }
 
-  const { title, date, location, image, description } = event;
+  const { title, date, location, image, description, id } = event;
 
   return (
     <>
@@ -32,6 +33,7 @@ export default function EventDetailPage({ event }) {
       <EventContent>
         <p>{description}</p>
       </EventContent>
+      <Comments eventId={id} />
     </>
   );
 }

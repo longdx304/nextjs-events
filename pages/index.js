@@ -1,4 +1,5 @@
 import EventsList from '@/components/events-list/events-list.component';
+import NewsletterRegistration from '@/components/newsletter-registration/newsletter-registration.component';
 import { getFeaturedEvents } from '@/utils/firebase';
 import Head from 'next/head';
 
@@ -12,6 +13,7 @@ export default function HomePage({ events }) {
           content="Find a lot of great events that allow you to evolve..."
         />
       </Head>
+      <NewsletterRegistration />
       <EventsList events={events} />
     </div>
   );
