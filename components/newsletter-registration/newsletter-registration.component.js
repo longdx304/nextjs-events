@@ -1,8 +1,19 @@
+import { NotificationContext } from '@/contexts/notification.context';
+import { useContext } from 'react';
 import classes from './newsletter-registration.module.css';
 
 function NewsletterRegistration() {
+  const { showNotification } = useContext(NotificationContext);
+
   async function registrationHandler(event) {
     event.preventDefault();
+
+    // showing pending status
+    showNotification({
+      title: 'Signing up...',
+      message: 'Registering for newsletter.',
+      status: 'pending',
+    });
 
     // fetch user input (state or refs)
     const email = event.target.email.value;
@@ -16,8 +27,28 @@ function NewsletterRegistration() {
       },
       body: JSON.stringify({ email }),
     };
-    const response = await fetch(endpoint, options);
-    console.log(await response.json());
+
+    try {
+      const response = await fetch(endpoint, options);
+      const data = await response.json();
+
+      // throw error ourself because server will return error response code but not throwing error
+      if (response.ok) {
+        showNotification({
+          title: 'Success!',
+          message: 'Successfully registered for newsletter!',
+          status: 'success',
+        });
+        return data;
+      }
+      throw new Error(data.message || 'Something went wrong!');
+    } catch (error) {
+      showNotification({
+        title: 'Error!',
+        message: error.message || 'Something went wrong!',
+        status: 'error',
+      });
+    }
   }
 
   return (

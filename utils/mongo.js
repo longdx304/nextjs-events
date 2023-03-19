@@ -1,11 +1,5 @@
 import { MongoClient } from 'mongodb';
 
-function getCol(client, collectionName) {
-  const dbName = 'events';
-  const db = client.db(dbName);
-  return db.collection(collectionName);
-}
-
 export async function connectDatabase() {
   const url =
     'mongodb+srv://longdo:Zxcvdef1@cluster0.hhygpom.mongodb.net/?retryWrites=true&w=majority';
